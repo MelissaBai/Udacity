@@ -7,13 +7,16 @@ sys.path.append("../tools/")
 
 from feature_format import featureFormat, targetFeatureSplit
 from tester import dump_classifier_and_data
+from sklearn.cross_validation import StratifiedShuffleSplit
+from sklearn.naive_bayes import GaussianNB
+
 
 ### Task 1: Select what features you'll use.
 ### features_list is a list of strings, each of which is a feature name.
 ### The first feature must be "poi".
-features_list = ['poi','total_payments','bonus',
-                 'restricted_stock', 'salary', 'restricted_stock_deferred',
-                 'expenses', 'shared_receipt_with_poi', 'from_poi_ratio', 'to_poi_ratio']
+features_list = ['poi', 'deferred_income', 'long_term_incentive', 'shared_receipt_with_poi',
+                'loan_advances','bonus', 'total_stock_value', 'restricted_stock', 'salary',
+                'total_payments', 'exercised_stock_options']
                  # You will need to use more features
 
 ### Load the dictionary containing the dataset.
@@ -47,13 +50,7 @@ my_dataset = data_dict
 ### Extract features and labels from dataset for local testing
 data = featureFormat(my_dataset, features_list, sort_keys = True)
 labels, features = targetFeatureSplit(data)
-'''
-for i, row in enumerate(features):
-    for j, x in enumerate(row):
-        if str(x) == 'nan':
-            features[i][j] = 0.0
-print features[6]
-'''
+
 ### Task 4: Try a varity of classifiers
 ### Please name your classifier clf for easy export below.
 ### Note that if you want to do PCA or other multi-stage operations,
@@ -62,15 +59,23 @@ print features[6]
 
 # Provided to give you a starting point. Try a variety of classifiers.
 
-from sklearn.metrics import accuracy_score
-from sklearn.cross_validation import train_test_split
-features_train, features_test, labels_train, labels_test = \
-    train_test_split(features, labels, test_size=0.3, random_state=42)
+cv = StratifiedShuffleSplit(labels, random_state = 42)
+for train_idx, test_idx in cv:
+    features_train = []
+    features_test  = []
+    labels_train   = []
+    labels_test    = []
+    for ii in train_idx:
+        features_train.append( features[ii] )
+        labels_train.append( labels[ii] )
+    for jj in test_idx:
+        features_test.append( features[jj] )
+        labels_test.append( labels[jj] )
 
 from sklearn.tree import DecisionTreeClassifier
-clf = DecisionTreeClassifier(min_samples_split=2)
-clf.fit(features_train,labels_train)
-clf.score(features_test,labels_test)
+clf = GaussianNB()
+clf.fit(features_train, labels_train)
+
 
 
 ### Task 5: Tune your classifier to achieve better than .3 precision and recall
@@ -81,11 +86,7 @@ clf.score(features_test,labels_test)
 ### http://scikit-learn.org/stable/modules/generated/sklearn.cross_validation.StratifiedShuffleSplit.html
 
 # Example starting point. Try investigating other evaluation techniques!
-'''
-from sklearn.cross_validation import train_test_split
-features_train, features_test, labels_train, labels_test = \
-    train_test_split(features, labels, test_size=0.3, random_state=42)
-'''
+
 ### Task 6: Dump your classifier, dataset, and features_list so anyone can
 ### check your results. You do not need to change anything below, but make sure
 ### that the version of poi_id.py that you submit can be run on its own and
