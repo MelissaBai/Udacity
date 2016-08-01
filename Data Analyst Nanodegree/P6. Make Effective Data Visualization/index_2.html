@@ -28,6 +28,7 @@
         myChart.setBounds(80, "50px", "50%", "50%");
         //myChart.addMeasureAxis("p", "ListingCategory");
         var x = myChart.addCategoryAxis("x", ["MonthlyDisposableRange","LoanStatusGroup"]);
+        x.addOrderRule(["Less than 100", "100-1000", "1000-2000", "2000-3000", "More than 3000"]);
         var y = myChart.addMeasureAxis("y", "Counts");
         var series = myChart.addSeries("LoanStatusGroup", dimple.plot.bar);
         series.addOrderRule(["Less than 100", "100-1000", "1000-2000", "2000-3000", "More than 3000"])
