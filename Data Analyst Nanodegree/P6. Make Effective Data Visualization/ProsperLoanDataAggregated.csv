@@ -1,0 +1,13 @@
+MonthlyDisposableRange,LoanStatusGroup,Counts
+100-1000,Good,1640
+100-1000,Bad,170
+1000-2000,Good,7205
+1000-2000,Bad,805
+2000-3000,Good,15620
+2000-3000,Bad,1444
+Less than 100,Good,1740
+Less than 100,Bad,193
+More than 3000,Good,80627
+More than 3000,Bad,4476
+None,Good,15
+None,Bad,2

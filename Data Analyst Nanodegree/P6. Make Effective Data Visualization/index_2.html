@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>
+    <script type="text/javascript">
+
+    function draw1(data) {
+
+    /*
+      D3.js setup code
+    */
+        "use strict";
+        var margin = 50,
+            width = 1600 - margin,
+            height = 800 - margin;
+
+        var svg1 = d3.select("body")
+          .append("svg")
+            .attr("width", width + margin)
+            .attr("height", height + margin)
+          .append('g')
+              .attr('class','chart');
+
+
+        var myChart = new dimple.chart(svg1, data);
+        myChart.setBounds(80, "50px", "50%", "50%");
+        //myChart.addMeasureAxis("p", "ListingCategory");
+        var x = myChart.addCategoryAxis("x", ["MonthlyDisposableRange","LoanStatusGroup"]);
+        var y = myChart.addMeasureAxis("y", "Counts");
+        var series = myChart.addSeries("LoanStatusGroup", dimple.plot.bar);
+        series.addOrderRule(["Less than 100", "100-1000", "1000-2000", "2000-3000", "More than 3000"])
+        myChart.addLegend(10, 10, 500, 30, "right");
+        myChart.draw();
+      };
+
+      function draw2(data) {
+
+        "use strict";
+        var margin = 50,
+            width = 1600 - margin,
+            height = 800 - margin;
+
+        var svg2 = d3.select("body")
+          .append("svg")
+            .attr("width", width + margin)
+            .attr("height", height + margin)
+          .append('g')
+              .attr('class','chart');
+
+        var myChart = new dimple.chart(svg2, data);
+        myChart.setBounds(80, "50px", "50%", "50%");
+        var x = myChart.addCategoryAxis("x", "Group");
+        x.addOrderRule(["Less than 100", "100-1000", "1000-2000", "2000-3000", "More than 3000"]);
+        var y = myChart.addMeasureAxis("y", "BadLoanRate")
+        y.tickFormat = "%";
+        myChart.addSeries("Bad Loan Rate", dimple.plot.line);
+        myChart.addSeries("Bad Loan Rate", dimple.plot.scattor);
+        myChart.addLegend(10, 10, 500, 30, "right");
+        myChart.draw();
+      }
+    </script>
+  </head>
+<body>
+  <script type="text/javascript">
+    /*
+    Use D3 (not dimple.js) to load the TSV file
+    and pass the contents of it to the draw function
+    */
+  d3.csv("ProsperLoanDataAggregated.csv", draw1);
+  d3.csv("BadLoanRate.csv", draw2);
+  </script>
+</body>
+</html>
