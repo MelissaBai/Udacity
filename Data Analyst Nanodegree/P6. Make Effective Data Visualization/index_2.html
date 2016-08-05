@@ -1,76 +1,100 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <script src="http://d3js.org/d3.v3.min.js"></script>
-  <script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>
-    <script type="text/javascript">
-
-    function draw1(data) {
-
-    /*
-      D3.js setup code
-    */
-        "use strict";
-        var margin = 50,
-            width = 1600 - margin,
-            height = 800 - margin;
-
-        var svg1 = d3.select("body")
-          .append("svg")
-            .attr("width", width + margin)
-            .attr("height", height + margin)
-          .append('g')
-              .attr('class','chart');
-
-
-        var myChart = new dimple.chart(svg1, data);
-        myChart.setBounds(80, "50px", "50%", "50%");
-        //myChart.addMeasureAxis("p", "ListingCategory");
-        var x = myChart.addCategoryAxis("x", ["MonthlyDisposableRange","LoanStatusGroup"]);
-        x.addOrderRule(["Less than 100", "100-1000", "1000-2000", "2000-3000", "More than 3000"]);
-        var y = myChart.addMeasureAxis("y", "Counts");
-        var series = myChart.addSeries("LoanStatusGroup", dimple.plot.bar);
-        series.addOrderRule(["Less than 100", "100-1000", "1000-2000", "2000-3000", "More than 3000"])
-        myChart.addLegend(10, 10, 500, 30, "right");
-        myChart.draw();
-      };
-
-      function draw2(data) {
-
-        "use strict";
-        var margin = 50,
-            width = 1600 - margin,
-            height = 800 - margin;
-
-        var svg2 = d3.select("body")
-          .append("svg")
-            .attr("width", width + margin)
-            .attr("height", height + margin)
-          .append('g')
-              .attr('class','chart');
-
-        var myChart = new dimple.chart(svg2, data);
-        myChart.setBounds(80, "50px", "50%", "50%");
-        var x = myChart.addCategoryAxis("x", "Group");
-        x.addOrderRule(["Less than 100", "100-1000", "1000-2000", "2000-3000", "More than 3000"]);
-        var y = myChart.addMeasureAxis("y", "BadLoanRate")
-        y.tickFormat = "%";
-        myChart.addSeries("Bad Loan Rate", dimple.plot.line);
-        myChart.addSeries("Bad Loan Rate", dimple.plot.scattor);
-        myChart.addLegend(10, 10, 500, 30, "right");
-        myChart.draw();
-      }
+    <meta charset="utf-8">
+    <script src="http://d3js.org/d3.v3.min.js">
     </script>
-  </head>
+    <script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js">
+    </script>
+    <script type="text/javascript">
+    "use strict";
+
+    // First bar graph for the loan status of each monthly disposable income group.
+    function draw1(data) {
+      // Setting up dimensions for the svg element.
+      var margin = 50;
+      var width = 1200 - margin;
+      var height = 600 - margin;
+
+      // Setting up svg chart for the first graph.
+      var svg = d3.select("body").append("svg")
+          .attr("width", width + margin)
+          .attr("height", height + margin);
+      svg.append('g').attr('class', 'chart');
+      svg.append("text")
+          .attr("x", margin)
+          .attr("y", margin / 2)
+          .style("text-anchor", "right")
+          .style("font-size", "16px")
+          .text("Bad loan and good loan count break down by monthly disposable income group");
+
+      // Dimple.js code for the first graph of breakdown of
+      // monthly disposable income group in loan status.
+      var myChart = new dimple.chart(svg, data);
+      myChart.setBounds(80, "50px", "50%", "50%");
+
+      //myChart.addMeasureAxis("p", "ListingCategory");
+
+      var x = myChart.addCategoryAxis("x", ["MonthlyDisposableIncomeGroup", "LoanStatusGroup"]);
+      x.addOrderRule(["Less than 100", "100-1000", "1000-2000", "2000-3000", "More than 3000"]);
+      x.title = "Monthly disposable income group";
+      var y = myChart.addMeasureAxis("y", "Counts");
+      y.title = "Count"
+      var series = myChart.addSeries("LoanStatusGroup", dimple.plot.bar);
+      series.addOrderRule(["Less than 100", "100-1000", "1000-2000", "2000-3000", "More than 3000"])
+      myChart.addLegend(10, 40, 500, 30, "right");
+      myChart.draw();
+    }
+
+    // Second graph for the bad loan rate of each monthly disposable income group.
+    function draw2(data) {
+      // Setting up dimensions for the svg element.
+      var margin = 50;
+      var width = 1200 - margin;
+      var height = 600 - margin;
+
+      var svg = d3.select("body").append("svg")
+          .attr("width", width + margin)
+          .attr("height", height + margin);
+      svg.append('g').attr('class', 'chart');
+      svg.append("text")
+          .attr("x", margin)
+          .attr("y", margin / 2)
+          .style("text-anchor", "right")
+          .style("font-size", "16px")
+          .text("Bad loan rate breakdown by monthly disposable income group");
+
+      // Dimple.js code for the second graph of bad loan rate line chart
+      // for the monthly disposable income group.
+      var myChart = new dimple.chart(svg, data);
+
+      myChart.setBounds(80, "50px", "50%", "50%");
+      var x = myChart.addCategoryAxis("x", "MonthlyDisposableIncomeGroup");
+      x.title = "Monthly disposable income group"
+      x.addOrderRule(["Less than 100", "100-1000", "1000-2000", "2000-3000", "More than 3000"]);
+      var y = myChart.addMeasureAxis("y", "BadLoanRate")
+      y.title = "Percentage of bad loans"
+      y.tickFormat = "%";
+      myChart.addSeries("Bad Loan Rate", dimple.plot.bar);
+      //myChart.addSeries("Bad Loan Rate", dimple.plot.scattor);
+      //myChart.addLegend(10, 40, 500, 30, "right");
+      myChart.draw();
+    }
+    </script>
+</head>
 <body>
-  <script type="text/javascript">
+    <h3>Higher Monthly Disposable Income Means More Loans and Lower Bad Loan Rate.</h3>
+    <p>Bad Loan includes loan status in defaulted, chargedoff,
+      cancelled any all overdues, good loan includes all the rest</p>
+    <p>Monthly disposable income is stated monthly income minus monthly loan amount.</p>
+    <br>
+    <script type="text/javascript">
     /*
     Use D3 (not dimple.js) to load the TSV file
     and pass the contents of it to the draw function
     */
-  d3.csv("ProsperLoanDataAggregated.csv", draw1);
-  d3.csv("BadLoanRate.csv", draw2);
-  </script>
+    d3.csv("ProsperLoanDataAggregated.csv", draw1);
+    d3.csv("BadLoanRate.csv", draw2);
+    </script>
 </body>
 </html>

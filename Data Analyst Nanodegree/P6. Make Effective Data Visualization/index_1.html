@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <script src="http://d3js.org/d3.v3.min.js"></script>
-  <script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>
+    <meta charset="utf-8">
+    <script src="http://d3js.org/d3.v3.min.js">
+    </script>
+    <script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js">
+    </script>
     <script type="text/javascript">
     function draw(data) {
 
     /*
       D3.js setup code
     */
-
+    // Setting up margins for the html page
         "use strict";
         var margin = 50,
             width = 1600 - margin,
             height = 800 - margin;
-
+    // Create svg chart with margins
         var svg = d3.select("body")
           .append("svg")
             .attr("width", width + margin)
@@ -26,7 +28,7 @@
         /*
           Dimple.js Chart construction code
         */
-
+    // Dimple.js chart for the monthlydisposable income group's loan status breakdown
         var myChart = new dimple.chart(svg, data);
         myChart.setBounds(80, "50px", "50%", "50%");
         //myChart.addMeasureAxis("p", "ListingCategory");
@@ -38,14 +40,15 @@
         myChart.draw();
       };
     </script>
-  </head>
+    <title></title>
+</head>
 <body>
-  <script type="text/javascript">
+    <script type="text/javascript">
     /*
     Use D3 (not dimple.js) to load the TSV file
     and pass the contents of it to the draw function
     */
-  d3.csv("ProsperLoanDataAggregated.csv", draw);
-  </script>
+    d3.csv("ProsperLoanDataAggregated.csv", draw);
+    </script>
 </body>
 </html>
