@@ -3,12 +3,13 @@ import math
 from environment import Agent, Environment
 from planner import RoutePlanner
 from simulator import Simulator
+import numpy as np
 
 class LearningAgent(Agent):
     """ An agent that learns to drive in the Smartcab world.
         This is the object you will be modifying. """ 
 
-    def __init__(self, env, learning=False, epsilon=0.05, alpha=0.8):
+    def __init__(self, env, learning=False, epsilon=1, alpha=0.99):
         super(LearningAgent, self).__init__(env)     # Set the agent in the evironment 
         self.planner = RoutePlanner(self.env, self)  # Create a route planner
         self.valid_actions = self.env.valid_actions  # The set of valid actions
@@ -46,10 +47,14 @@ class LearningAgent(Agent):
             self.epsilon= 0
         else:
             #self.epsilon = self.epsilon - 0.05
-            #self.epsilon = self.alpha ** self.t
+            self.epsilon = self.alpha ** self.t
             #self.epsilon = 1 / (self.t ** 2)
             #self.epsilon = math.e**(-self.alpha*self.t)
-            self.epsilon = math.cos(self.alpha*self.t)
+            #self.epsilon = math.cos(self.alpha*self.t)
+            #self.epsilon = np.exp(-0.2*self.t)
+            #self.epsilon = (-1/class.total_trials)*self.t**2 + 1
+            #self.epsilon = math.fabs(math.cos(self.alpha*self.t))
+            #self.epsilon = self.epsilon - .005
         return None
 
     def build_state(self):
@@ -229,7 +234,7 @@ def run():
     # Flags:
     #   tolerance  - epsilon tolerance before beginning testing, default is 0.05 
     #   n_test     - discrete number of testing trials to perform, default is 0
-    sim.run(n_test = 10)
+    sim.run(n_test = 100, tolerance=0.001)
     
 
 
